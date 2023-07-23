@@ -13,7 +13,7 @@ class ToDoListViewController: UITableViewController{
     
     // MARK: - Properties
     
-    let itemArray = ["find mike","buy eggos","destroy zort"]
+    var itemArray = ["find mike","buy eggos","destroy zort"]
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -29,12 +29,47 @@ class ToDoListViewController: UITableViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
-  //  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-  //  }
+    
+    //tableview delegate
+   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      // print(itemArray[indexPath.row])
+       
+       if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark{
+           tableView.cellForRow(at: indexPath)?.accessoryType = .none
+       }else{
+           tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+       }
+       
+       tableView.deselectRow(at: indexPath, animated: true)//animated
+   }
     
     
     // MARK: - Actions
 
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()//bunu scope içindekine erişmek için oluşturduk
+        
+        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default){(action) in
+            //what will be happen when click the user add ıtem button on our uıalert...
+            print(textField.text)
+            self.itemArray.append(textField.text!)
+            self.tableView.reloadData()
+        }
+        
+        alert.addTextField{(alertTextField) in
+            alertTextField.placeholder = "create new item"
+      textField = alertTextField
+            
+            
+            
+        }
+        alert.addAction(action)
+        present(alert, animated: true,completion: nil)
+        
+    }
 }
 
